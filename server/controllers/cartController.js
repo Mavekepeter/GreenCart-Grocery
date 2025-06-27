@@ -5,11 +5,11 @@ export const updateCart = async (req,res)=>{
     try {
         const {userId,cartItems} = req.body
         await User.findByIdAndUpdate(userId,{cartItems})
-        res.json({succes:true, message:"cart updated "})
-
+        res.json({ success: true, message: "cart updated" });
+ 
 
     } catch (error) {
         console.log(error.message);
-        res.json({succes:faalse,message:error.message})
+        res.json({ success: error, message: "error updating cart" });
     }
 }

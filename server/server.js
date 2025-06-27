@@ -18,7 +18,10 @@ const allowedOrigins = ['http://localhost:5173']
 //middleware configuration
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin:allowedOrigins,credential:true}));
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true                
+}));
 await connectDB()
 await connectCloudinary()
 

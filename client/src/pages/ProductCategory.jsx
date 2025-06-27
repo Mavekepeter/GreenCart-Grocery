@@ -7,9 +7,17 @@ import ProductCard from '../components/ProductCard';
 const ProductCategory = () => {
     const {products} = useAppContext();
     const {category} = useParams()
-    const  searchCategory = categories.find((item)=>item.path.toLocaleLowerCase() ===category) 
-    const filteredProducts = products.filter((product)=>product.category.toLocaleLowerCase()=== category)
-  return (
+    const searchCategory = categories.find(
+  (item) => item.path.trim().toLowerCase() === category?.trim().toLowerCase()
+);
+
+   const filteredProducts = products.filter(
+  (product) =>
+    typeof product.category === 'string' &&
+    product.category.trim().toLowerCase() === category?.trim().toLowerCase());
+   
+
+ return (
     <div className='mt-16'>
       {searchCategory && (
         <div className='flex flex-col items-end w-max'>

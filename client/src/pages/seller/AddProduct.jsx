@@ -1,5 +1,7 @@
 import React,{useState} from 'react'
 import { assets, categories } from '../../assets/assets';
+import { useAppContext } from '../../context/AppContent';
+import toast from 'react-hot-toast';
 
 const AddProduct = () => {
     const [files, setFiles] = useState([]);
@@ -7,10 +9,45 @@ const AddProduct = () => {
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [price, setprice] = useState('');
-    const [offerprice, setofferprice] = useState('');
+    const [offerPrice, setofferprice] = useState('');
+
+    const {axios} = useAppContext();
 
     const onSubmitHandler = async(event)=>{
-        event.preventDefault();
+        try {
+            event.preventDefault();
+
+        const productData = {
+            name,
+            description,
+            category,
+            price,
+            offerPrice
+
+        }
+
+        const formData = new FormData();
+        formData.append('productData',JSON.stringify(productData))
+        for (let i = 0; i < files.length; i++) {
+            formData.append('images',files[i])
+        }
+        const {data} = await axios.post('/api/product/add',formData)
+        if (data.success) {
+            toast.success(data.message)
+            setName(''),
+            setDescription(''),
+            setCategory(''),
+            setprice(''),
+            setofferprice(''),
+            setFiles([]) 
+
+        }else{
+            toast.error(data.message)
+        }
+
+        } catch (error) {
+            toast.error(error.message)
+        }
     }
     
   return (
@@ -70,7 +107,7 @@ const AddProduct = () => {
                     </div>
                     <div className="flex-1 flex flex-col gap-1 w-32">
                         <label className="text-base font-medium" htmlFor="offer-price">Offer Price</label>
-                        <input onChange={(e)=>setofferprice(e.target.value)} value={offerprice}
+                        <input onChange={(e)=>setofferprice(e.target.value)} value={offerPrice}
                          id="offer-price" type="number" placeholder="0" className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
                     </div>
                 </div>

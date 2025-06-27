@@ -20,14 +20,16 @@ const SellerLogin = () => {
           }
     } catch (error) {
          toast.error(error.message)
+         console.log("login again");
+         
     }    
   }
 
 
   useEffect(()=>{
     if (isSeller) {
-      navigate("/seller")
-    }
+      navigate("/seller")}
+      
   },[isSeller])
 
   return !isSeller &&  (

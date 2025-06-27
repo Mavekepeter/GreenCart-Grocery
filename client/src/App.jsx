@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbr from './components/Navbr'
+import Navbar from './components/Navbar'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import {Toaster} from "react-hot-toast"
@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <div className='text-default min-h-screen text-gray-700 bg-white'>
-      {isSellerpath ?null :<Navbr/>}
+      {isSellerpath ?null :<Navbar/>}
       {showUserLogin ? <Login/> : null}
       <Toaster/>
       <div className={`${isSellerpath ? "":"px-6 md:px-16 lg:px-24 xl:px-32"}`} >

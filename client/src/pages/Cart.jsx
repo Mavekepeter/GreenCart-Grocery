@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContent";
 import { assets, dummyAddress } from "../assets/assets";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Cart = () => {
     const [showAddress, setShowAddress] = useState(false)
     const {getCartCount,getCartAmount,updateCartItem,
-     removeFromCart,cartItems,navigate,products,currency} = useAppContext();
+     removeFromCart,cartItems,navigate,products,currency,user} = useAppContext();
 
      const [cartArray, setcartArray] = useState([])
-     const [addresses, setAddresses] = useState(dummyAddress)
-     const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0])
+     const [addresses, setAddresses] = useState([])
+     const [selectedAddress, setSelectedAddress] = useState(null);
      const [paymentOption, setPaymentOption] = useState("COD")
 
      const getCart =()=>{
@@ -22,6 +24,23 @@ const Cart = () => {
         setcartArray(tempArray)
      }
 
+    const getUserAddress = async()=>{
+        try {
+            const {data} =  await axios.get('/api/address/get');
+            if (data.success) {
+                selectedAddress(data.addresses[0])
+                if (data.addresses.length>0) {
+                    setSelectedAddress(data.addresses[0])
+                }
+            }else{
+                toast.error(data.message)
+            }
+
+        } catch (error) {
+        toast.error(error.message)
+
+        }
+    }
      const placeOrder = async()=>{
 
      }
@@ -31,6 +50,12 @@ const Cart = () => {
             getCart()
         }
      },[products,cartItems])
+
+     useEffect(()=>{
+        if (user) {
+            getUserAddress()
+        }
+     },[user])
 
     return products.length >0 && cartItems ? (
         <div className="flex flex-col md:flex-row mt-16">
@@ -125,7 +150,7 @@ const Cart = () => {
 
                 <div className="text-gray-500 mt-4 space-y-2">
                     <p className="flex justify-between">
-                        <span>Price</span><span>{currency}{getCartAmount}</span>
+                        <span>Price</span><span>{currency}{getCartAmount()}</span>
                     </p>
                     <p className="flex justify-between">
                         <span>Shipping Fee</span><span className="text-green-600">Free</span>

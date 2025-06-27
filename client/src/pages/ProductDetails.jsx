@@ -32,7 +32,7 @@ const ProductDetails = () => {
             <p>
                 <Link to={'/'}>Home</Link> /
                 <Link to={'/products'}> Products</Link> /
-                <Link to={`/products/${product.category.toLowerCase()}`}> {product.category}</Link> /
+                <Link to={`/products/${String(product.category).toLowerCase()}`}> {product.category}</Link>
                 <span className="text-primary"> {product.name}</span>
             </p>
 
@@ -70,10 +70,15 @@ const ProductDetails = () => {
 
                     <p className="text-base font-medium mt-6">About Product</p>
                     <ul className="list-disc ml-4 text-gray-500/70">
-                        {product.description.map((desc, index) => (
-                            <li key={index}>{desc}</li>
-                        ))}
-                    </ul>
+                     {Array.isArray(product.description) ? (
+                      product.description.map((desc, index) => (
+                     <li key={index}>{desc}</li>
+                        ))
+                  ) : (
+                        <li>{product.description}</li> // fallback if it's just a string
+              )}
+                         </ul>
+
 
                     <div  onClick={()=>addToCart(product._id)} className="flex items-center mt-10 gap-4 text-base">
                         <button className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition" >
